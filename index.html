@@ -7,10 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --yellow:    #F2D828;
       --yellow-lt: #FBF2A8;
@@ -23,7 +21,6 @@
       --dark:      #0A0E24;
       --text-body: #2A3050;
     }
-
     html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', sans-serif;
@@ -87,174 +84,134 @@
       min-height: 700px;
       overflow: hidden;
       display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(170deg, #D6EEFA 0%, #B8DCEF 40%, #C8E8F8 75%, #D0EDF8 100%);
     }
 
-    /* Sky clouds */
-    .cloud {
+    /* Full-screen background video */
+    .hero-video {
       position: absolute;
-      border-radius: 50px;
-      background: rgba(255,255,255,0.6);
-      filter: blur(2px);
-    }
-    .cloud-1 { width:180px; height:50px; top:12%; left:8%; animation: cloudDrift 18s linear infinite; }
-    .cloud-2 { width:120px; height:36px; top:22%; left:55%; animation: cloudDrift 24s linear infinite 4s; }
-    .cloud-3 { width:220px; height:56px; top:8%;  left:70%; animation: cloudDrift 20s linear infinite 10s; }
-    @keyframes cloudDrift {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-120px); }
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
     }
 
-    /* Ground stripe */
-    .hero-ground {
+    /* Dark gradient overlay so text pops over the video */
+    .hero-overlay {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 30%;
-      background: repeating-linear-gradient(
-        90deg,
-        var(--yellow) 0px,
-        var(--yellow) 28px,
-        var(--white)  28px,
-        var(--white)  56px
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(10, 20, 60, 0.45) 0%,
+        rgba(10, 20, 60, 0.30) 40%,
+        rgba(10, 20, 60, 0.65) 100%
       );
-      opacity: 0.28;
-      border-radius: 0;
     }
 
-    /* Truck scene container */
-    .hero-scene {
+    /* Everything in the hero sits above the overlay */
+    .hero-content {
       position: relative;
-      width: 900px; max-width: 95vw;
-      height: 480px;
-    }
-
-    /* ── TRUCK SVG ── */
-    .truck-wrap {
-      position: absolute;
-      bottom: 70px; left: 50%;
-      transform: translateX(-160%);
-      animation: truckRoll 1.4s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;
-    }
-    @keyframes truckRoll {
-      to { transform: translateX(-52%); }
-    }
-
-    /* ── MASCOT ── */
-    .mascot-wrap {
-      position: absolute;
-      bottom: 62px; right: 80px;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: mascotPop 0.8s cubic-bezier(0.34,1.56,0.64,1) 1.5s forwards;
-    }
-    @keyframes mascotPop {
-      to { opacity:1; transform: translateY(0); }
-    }
-    .mascot-bounce {
-      animation: mascotIdle 3s ease-in-out 2.3s infinite;
-    }
-    @keyframes mascotIdle {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
-    }
-
-    /* Mascot waving arm */
-    .mascot-arm {
-      transform-origin: 82% 30%;
-      animation: wave 1.2s ease-in-out 2.3s infinite alternate;
-    }
-    @keyframes wave {
-      from { transform: rotate(-10deg); }
-      to   { transform: rotate(20deg); }
-    }
-
-    /* ── DRINKS ROW ── */
-    .drinks-row {
-      position: absolute;
-      bottom: 64px; left: 60px;
-      display: flex; gap: 16px; align-items: flex-end;
-      opacity: 0;
-      animation: drinksReveal 0.8s ease 1.8s forwards;
-    }
-    @keyframes drinksReveal {
-      to { opacity: 1; }
-    }
-    .drink-cup {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-    }
-    .drink-cup svg { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
-    .drink-label {
-      font-size: 0.6rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--blue-dk);
-      background: var(--white);
-      padding: 3px 8px;
-      border-radius: 6px;
-      white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    /* ── HERO TEXT ── */
-    .hero-text {
-      position: absolute;
-      top: 30px; left: 0; right: 0;
+      z-index: 2;
       text-align: center;
-      opacity: 0;
-      transform: translateY(-20px);
-      animation: heroText 1s ease 0.2s forwards;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      animation: heroReveal 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both;
     }
-    @keyframes heroText {
-      to { opacity:1; transform: translateY(0); }
+    @keyframes heroReveal {
+      from { opacity: 0; transform: translateY(36px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
+
     .hero-tag {
       display: inline-block;
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--blue);
-      background: rgba(255,255,255,0.75);
-      border: 1px solid rgba(26,58,156,0.2);
-      padding: 6px 18px;
+      color: var(--yellow);
+      border: 1px solid rgba(242,216,40,0.4);
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(6px);
+      padding: 7px 20px;
       border-radius: 40px;
-      margin-bottom: 14px;
+      margin-bottom: 22px;
     }
+
     .hero-title {
       font-family: 'Fraunces', serif;
       font-weight: 900;
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      line-height: 0.95;
-      color: var(--blue-dk);
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      line-height: 0.92;
+      color: var(--white);
       letter-spacing: -0.03em;
+      text-shadow: 0 4px 40px rgba(0,0,0,0.4);
     }
-    .hero-title em { font-style: italic; color: var(--blue-md); }
+    .hero-title em {
+      font-style: italic;
+      color: var(--yellow);
+    }
+
     .hero-slogan {
       font-family: 'Fraunces', serif;
       font-style: italic;
       font-weight: 300;
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      color: var(--blue);
-      margin-top: 10px;
-      opacity: 0.8;
+      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+      color: rgba(255,255,255,0.88);
+      margin-top: 18px;
+      letter-spacing: 0.03em;
     }
 
-    /* Scroll cue */
+    .hero-cta {
+      display: inline-block;
+      margin-top: 36px;
+      padding: 15px 42px;
+      background: var(--yellow);
+      color: var(--blue-dk);
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 60px;
+      box-shadow: 0 8px 32px rgba(242,216,40,0.4);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 14px 44px rgba(242,216,40,0.55);
+      background: var(--white);
+    }
+
+    /* Scroll indicator */
     .hero-scroll {
-      position: absolute; bottom: 24px; left: 50%;
+      position: absolute;
+      bottom: 32px; left: 50%;
       transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      opacity: 0; animation: heroText 1s 2.5s forwards;
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0;
+      animation: heroReveal 1s ease 1.6s forwards;
     }
-    .hero-scroll span { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); }
-    .scroll-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
-      animation: scrollBounce 1.6s ease-in-out infinite;
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
     }
-    @keyframes scrollBounce {
-      0%,100% { transform: translateY(0); opacity:1; }
-      50%      { transform: translateY(8px); opacity:0.4; }
+    .scroll-line {
+      width: 1px; height: 44px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.55), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { transform: scaleY(1); opacity: 1; }
+      50%      { transform: scaleY(0.5); opacity: 0.3; }
     }
 
     /* ── SHARED SECTION STYLES ───────────────────── */
@@ -273,11 +230,40 @@
     }
     .sec-title em { font-style: italic; }
 
-    /* ── GLOW-UP FEATURE ─────────────────────────── */
-    .glowup {
-      background: var(--blue-dk);
-      color: var(--white);
+    /* ── MARQUEE STRIP ───────────────────────────── */
+    .strip {
+      background: var(--blue);
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
     }
+    .strip-track {
+      display: inline-flex;
+      animation: marquee 18s linear infinite;
+      padding: 18px 0;
+    }
+    .strip-track span {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      padding: 0 32px;
+    }
+    .strip-track .dot {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.5rem;
+      padding: 0 4px;
+      vertical-align: middle;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── GLOW-UP FEATURE ─────────────────────────── */
+    .glowup { background: var(--blue-dk); color: var(--white); }
     .glowup .sec-label { color: var(--yellow); }
     .glowup .sec-title { color: var(--white); }
     .glowup .sec-title em { color: var(--yellow); }
@@ -313,17 +299,11 @@
     .stat-icon { font-size: 2.2rem; margin-bottom: 12px; display: block; }
     .stat-name {
       font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--white);
-      margin-bottom: 6px;
+      font-weight: 700; font-size: 1rem;
+      color: var(--white); margin-bottom: 6px;
     }
     .stat-desc { font-size: 0.82rem; line-height: 1.6; color: rgba(255,255,255,0.5); }
-
-    /* Big feature callout right column */
-    .glowup-callout {
-      display: flex; flex-direction: column; gap: 20px;
-    }
+    .glowup-callout { display: flex; flex-direction: column; gap: 20px; }
     .callout-pill {
       display: flex; align-items: center; gap: 16px;
       background: rgba(255,255,255,0.06);
@@ -343,45 +323,9 @@
       display: block;
       font-family: 'Fraunces', serif;
       font-size: 1.05rem;
-      color: var(--white);
-      margin-bottom: 3px;
+      color: var(--white); margin-bottom: 3px;
     }
-    .callout-pill .pill-text span {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.5);
-    }
-
-    /* ── BLUE DIVIDER STRIP ──────────────────────── */
-    .strip {
-      background: var(--blue);
-      padding: 0;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .strip-track {
-      display: inline-flex;
-      animation: marquee 18s linear infinite;
-      padding: 18px 0;
-    }
-    .strip-track span {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--yellow);
-      padding: 0 32px;
-    }
-    .strip-track .dot {
-      color: rgba(255,255,255,0.4);
-      font-size: 0.5rem;
-      padding: 0 4px;
-      vertical-align: middle;
-    }
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
+    .callout-pill .pill-text span { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
 
     /* ── MENU ────────────────────────────────────── */
     .menu { background: var(--baby-lt); }
@@ -392,10 +336,7 @@
       display: flex; align-items: flex-end; justify-content: space-between;
       margin-bottom: 52px; gap: 24px; flex-wrap: wrap;
     }
-    .menu-sub {
-      font-size: 0.95rem; line-height: 1.7;
-      color: rgba(42,48,80,0.6); max-width: 280px;
-    }
+    .menu-sub { font-size: 0.95rem; line-height: 1.7; color: rgba(42,48,80,0.6); max-width: 280px; }
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -403,8 +344,7 @@
     }
     .menu-card {
       background: var(--white);
-      border-radius: 22px;
-      padding: 32px 26px;
+      border-radius: 22px; padding: 32px 26px;
       border: 2px solid transparent;
       transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
       cursor: default;
@@ -443,15 +383,8 @@
     .about .sec-label { color: var(--blue-dk); }
     .about .sec-title { color: var(--blue-dk); }
     .about .sec-title em { color: var(--blue-md); }
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px; align-items: center;
-    }
-    .about-body {
-      font-size: 1.05rem; line-height: 1.85;
-      color: rgba(12,31,107,0.72); margin-top: 24px;
-    }
+    .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-body { font-size: 1.05rem; line-height: 1.85; color: rgba(12,31,107,0.72); margin-top: 24px; }
     .team-badge {
       display: inline-flex; align-items: center; gap: 10px;
       margin-top: 28px;
@@ -463,16 +396,12 @@
       width: 34px; height: 34px; border-radius: 50%;
       border: 2px solid var(--white);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      margin-left: -8px;
+      font-size: 1.1rem; margin-left: -8px;
     }
     .avatar:first-child { margin-left: 0; }
-    .a1 { background: #FBBF24; }
-    .a2 { background: #60A5FA; }
-    .a3 { background: #A78BFA; }
-    .a4 { background: #34D399; }
+    .a1 { background: #FBBF24; } .a2 { background: #60A5FA; }
+    .a3 { background: #A78BFA; } .a4 { background: #34D399; }
     .team-label { font-size: 0.85rem; font-weight: 500; color: var(--blue-dk); }
-    /* About visual */
     .about-visual {
       display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
       gap: 16px; height: 380px;
@@ -487,16 +416,10 @@
     .ac2 { background: var(--yellow); }
     .ac3 { background: var(--blue-md); }
     .ac-icon { font-size: 3rem; position: absolute; top: 20px; left: 20px; }
-    .ac-title {
-      font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.1rem;
-    }
-    .ac1 .ac-title { color: var(--white); }
-    .ac2 .ac-title { color: var(--blue-dk); }
-    .ac3 .ac-title { color: var(--white); }
+    .ac-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.1rem; }
+    .ac1 .ac-title { color: var(--white); } .ac2 .ac-title { color: var(--blue-dk); } .ac3 .ac-title { color: var(--white); }
     .ac-sub { font-size: 0.78rem; opacity: 0.6; margin-top: 3px; }
-    .ac1 .ac-sub { color: var(--white); }
-    .ac2 .ac-sub { color: var(--blue-dk); }
-    .ac3 .ac-sub { color: var(--white); }
+    .ac1 .ac-sub { color: var(--white); } .ac2 .ac-sub { color: var(--blue-dk); } .ac3 .ac-sub { color: var(--white); }
 
     /* ── PROMOTIONS ──────────────────────────────── */
     .promos { background: var(--white); }
@@ -520,10 +443,7 @@
       box-shadow: 0 16px 40px rgba(26,58,156,0.1);
     }
     .promo-icon { font-size: 2.4rem; margin-bottom: 16px; display: block; }
-    .promo-name {
-      font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.1rem;
-      color: var(--blue-dk); margin-bottom: 8px;
-    }
+    .promo-name { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.1rem; color: var(--blue-dk); margin-bottom: 8px; }
     .promo-desc { font-size: 0.84rem; line-height: 1.65; color: rgba(42,48,80,0.6); }
 
     /* ── CONTACT ─────────────────────────────────── */
@@ -531,25 +451,15 @@
     .contact .sec-label { color: var(--yellow); }
     .contact .sec-title { color: var(--white); }
     .contact .sec-title em { color: var(--yellow); }
-    .contact-inner {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 80px; align-items: start;
-    }
-    .contact-body {
-      font-size: 1rem; line-height: 1.8;
-      color: rgba(255,255,255,0.65); margin-top: 24px;
-    }
-    .contact-links {
-      display: flex; flex-direction: column; gap: 16px;
-      margin-top: 36px;
-    }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .contact-body { font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 24px; }
+    .contact-links { display: flex; flex-direction: column; gap: 16px; margin-top: 36px; }
     .contact-link {
       display: flex; align-items: center; gap: 16px;
       padding: 20px 24px;
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 16px;
-      text-decoration: none;
-      color: var(--white);
+      text-decoration: none; color: var(--white);
       transition: border-color 0.3s, background 0.3s, transform 0.3s;
     }
     .contact-link:hover {
@@ -565,72 +475,43 @@
     }
     .cl-body strong { display: block; font-size: 0.9rem; color: var(--white); margin-bottom: 2px; }
     .cl-body span { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
-
-    /* Right col: form area */
     .contact-form { display: flex; flex-direction: column; gap: 14px; }
     .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .cf-input, .cf-textarea {
       width: 100%;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 14px 18px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      color: var(--white);
-      outline: none;
+      border-radius: 12px; padding: 14px 18px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      color: var(--white); outline: none;
       transition: border-color 0.2s, background 0.2s;
     }
     .cf-input::placeholder, .cf-textarea::placeholder { color: rgba(255,255,255,0.3); }
-    .cf-input:focus, .cf-textarea:focus {
-      border-color: var(--yellow); background: rgba(255,255,255,0.08);
-    }
+    .cf-input:focus, .cf-textarea:focus { border-color: var(--yellow); background: rgba(255,255,255,0.08); }
     .cf-textarea { height: 120px; resize: none; }
     .cf-btn {
-      padding: 15px 36px;
-      background: var(--yellow);
-      color: var(--blue-dk);
-      font-family: 'Fraunces', serif; font-weight: 700;
+      padding: 15px 36px; background: var(--yellow);
+      color: var(--blue-dk); font-family: 'Fraunces', serif; font-weight: 700;
       font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase;
-      border: none; border-radius: 40px; cursor: pointer;
-      align-self: flex-start;
+      border: none; border-radius: 40px; cursor: pointer; align-self: flex-start;
       transition: background 0.2s, transform 0.2s;
     }
     .cf-btn:hover { background: var(--white); transform: translateY(-2px); }
-    .cf-label {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
-      text-transform: uppercase; color: rgba(255,255,255,0.4);
-      margin-bottom: -8px;
-    }
+    .cf-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: -8px; }
 
     /* ── FOOTER ──────────────────────────────────── */
     footer {
       background: #08143A;
       padding: 52px 60px 32px;
-      display: grid; grid-template-columns: 2fr 1fr 1fr;
-      gap: 60px;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px;
     }
-    .footer-name {
-      font-family: 'Fraunces', serif; font-weight: 900;
-      font-size: 1.6rem; color: var(--white); letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
+    .footer-name { font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.6rem; color: var(--white); letter-spacing: -0.02em; margin-bottom: 8px; }
     .footer-name span { color: var(--yellow); }
-    .footer-slogan {
-      font-family: 'Fraunces', serif; font-style: italic;
-      color: rgba(255,255,255,0.45); font-size: 0.9rem; margin-bottom: 18px;
-    }
+    .footer-slogan { font-family: 'Fraunces', serif; font-style: italic; color: rgba(255,255,255,0.45); font-size: 0.9rem; margin-bottom: 18px; }
     .footer-desc { font-size: 0.82rem; line-height: 1.7; color: rgba(255,255,255,0.38); }
-    .footer-col h5 {
-      font-family: 'Fraunces', serif; font-weight: 700;
-      font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--white); margin-bottom: 18px;
-    }
+    .footer-col h5 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); margin-bottom: 18px; }
     .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col ul a {
-      font-size: 0.82rem; color: rgba(255,255,255,0.45); text-decoration: none;
-      transition: color 0.2s;
-    }
+    .footer-col ul a { font-size: 0.82rem; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
     .footer-col ul a:hover { color: var(--yellow); }
     .footer-bottom {
       background: #08143A; border-top: 1px solid rgba(255,255,255,0.06);
@@ -639,11 +520,8 @@
       font-size: 0.75rem; color: rgba(255,255,255,0.28);
     }
 
-    /* ── SCROLL FADE-IN ──────────────────────────── */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
+    /* ── SCROLL REVEAL ───────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ── RESPONSIVE ──────────────────────────────── */
@@ -658,8 +536,7 @@
     }
     @media (max-width: 640px) {
       .nav-links, .nav-cta { display: none; }
-      .hero-scene { height: 400px; }
-      .drinks-row { display: none; }
+      .hero-title { font-size: 3.5rem; }
     }
   </style>
 </head>
@@ -679,163 +556,37 @@
 
 <!-- ═══════════════════ HERO ═══════════════════ -->
 <section class="hero">
-  <!-- Sky clouds -->
-  <div class="cloud cloud-1"></div>
-  <div class="cloud cloud-2"></div>
-  <div class="cloud cloud-3"></div>
-  <!-- Ground stripe -->
-  <div class="hero-ground"></div>
 
-  <div class="hero-scene">
+  <!-- ╔═══════════════════════════════════════════╗
+       ║  Place hero-video.mp4 in the same folder  ║
+       ║  as this index.html file before uploading ║
+       ╚═══════════════════════════════════════════╝ -->
+  <video
+    class="hero-video"
+    src="hero-video.mp4"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
 
-    <!-- Brand text top -->
-    <div class="hero-text">
-      <div class="hero-tag">✦ Freshly Squeezed · Probiotic Boosted · Suburban Chicago</div>
-      <h1 class="hero-title">Lemon<br><em>Theory</em></h1>
-      <p class="hero-slogan">Sip Bright. Feel Right.</p>
-    </div>
+  <!-- Gradient overlay for text legibility -->
+  <div class="hero-overlay"></div>
 
-    <!-- TRUCK -->
-    <div class="truck-wrap">
-      <svg width="380" height="260" viewBox="0 0 380 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Truck body -->
-        <rect x="10" y="80" width="300" height="140" rx="12" fill="#F2D828"/>
-        <!-- Truck cab -->
-        <rect x="270" y="100" width="100" height="120" rx="10" fill="#E8C820"/>
-        <!-- Windshield -->
-        <rect x="278" y="108" width="80" height="55" rx="7" fill="#B8E0F4" opacity="0.85"/>
-        <line x1="318" y1="108" x2="318" y2="163" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-        <!-- Stripe on body -->
-        <rect x="10" y="165" width="300" height="8" fill="#E8C820"/>
-        <!-- Brand text on truck -->
-        <text x="155" y="130" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="18" fill="#1A3A9C">LEMON THEORY</text>
-        <text x="155" y="153" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#1A3A9C" opacity="0.7" letter-spacing="1">fresh lemonade · good vibes</text>
-        <!-- Lemon badge on truck -->
-        <circle cx="155" cy="178" r="16" fill="#1A3A9C"/>
-        <circle cx="155" cy="178" r="12" fill="#F2D828"/>
-        <text x="155" y="183" text-anchor="middle" font-size="12">🍋</text>
-        <!-- Truck window back opening -->
-        <rect x="30" y="88" width="220" height="72" rx="6" fill="#0C1F6B" opacity="0.15"/>
-        <!-- Drinks jars in truck window -->
-        <rect x="45"  y="94" width="26" height="50" rx="5" fill="#38BDF8" opacity="0.75"/>
-        <rect x="80"  y="98" width="26" height="46" rx="5" fill="#A855F7" opacity="0.75"/>
-        <rect x="115" y="94" width="26" height="50" rx="5" fill="#F97316" opacity="0.75"/>
-        <rect x="150" y="96" width="26" height="48" rx="5" fill="#22C55E" opacity="0.75"/>
-        <rect x="185" y="94" width="26" height="50" rx="5" fill="#F2D828" opacity="0.85"/>
-        <!-- Lemon decorations -->
-        <circle cx="50"  cy="222" r="22" fill="#F2D828" stroke="#E8C820" stroke-width="2"/>
-        <circle cx="50"  cy="222" r="8"  fill="none"   stroke="#E8C820" stroke-width="1.5"/>
-        <line x1="50" y1="200" x2="50" y2="244" stroke="#E8C820" stroke-width="1"/>
-        <!-- Truck wheels -->
-        <circle cx="80"  cy="228" r="28" fill="#1A3A9C"/>
-        <circle cx="80"  cy="228" r="18" fill="#0C1F6B"/>
-        <circle cx="80"  cy="228" r="8"  fill="#F2D828"/>
-        <circle cx="280" cy="228" r="28" fill="#1A3A9C"/>
-        <circle cx="280" cy="228" r="18" fill="#0C1F6B"/>
-        <circle cx="280" cy="228" r="8"  fill="#F2D828"/>
-        <!-- Squeeze the Day sign on truck -->
-        <rect x="30" y="195" width="200" height="28" rx="6" fill="#1A3A9C"/>
-        <text x="130" y="213" text-anchor="middle" font-family="Fraunces,serif" font-weight="700" font-size="11" fill="#F2D828" letter-spacing="2">SQUEEZE THE DAY 🍋</text>
-      </svg>
-    </div>
+  <!-- Brand text centered over video -->
+  <div class="hero-content">
+    <span class="hero-tag">✦ Freshly Squeezed · Probiotic Boosted · Suburban Chicago</span>
+    <h1 class="hero-title">Lemon<br><em>Theory</em></h1>
+    <p class="hero-slogan">Sip Bright. Feel Right.</p>
+    <a href="#menu" class="hero-cta">Explore the Menu</a>
+  </div>
 
-    <!-- MASCOT -->
-    <div class="mascot-wrap">
-      <div class="mascot-bounce">
-        <svg width="140" height="200" viewBox="0 0 140 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Shadow -->
-          <ellipse cx="70" cy="195" rx="38" ry="7" fill="rgba(0,0,0,0.1)"/>
-          <!-- Shoes -->
-          <ellipse cx="50" cy="183" rx="22" ry="10" fill="white"/>
-          <ellipse cx="90" cy="183" rx="22" ry="10" fill="white"/>
-          <rect x="34" y="175" width="30" height="14" rx="3" fill="white"/>
-          <rect x="74" y="175" width="30" height="14" rx="3" fill="white"/>
-          <!-- Yellow lemon details on shoes -->
-          <circle cx="46" cy="183" r="4" fill="#F2D828"/>
-          <circle cx="93" cy="183" r="4" fill="#F2D828"/>
-          <!-- Legs -->
-          <rect x="42" y="155" width="22" height="28" rx="8" fill="#F2D828"/>
-          <rect x="76" y="155" width="22" height="28" rx="8" fill="#F2D828"/>
-          <!-- Body/apron -->
-          <ellipse cx="70" cy="120" rx="42" ry="48" fill="#F2D828"/>
-          <!-- Apron white bib -->
-          <ellipse cx="70" cy="130" rx="28" ry="34" fill="white" opacity="0.9"/>
-          <!-- Logo on apron -->
-          <circle cx="70" cy="125" r="18" fill="#1A3A9C"/>
-          <circle cx="70" cy="125" r="13" fill="#F2D828"/>
-          <text x="70" y="130" text-anchor="middle" font-size="12">🍋</text>
-          <!-- Left arm (static) -->
-          <ellipse cx="22" cy="118" rx="12" ry="24" rx="12" ry="22" fill="#F2D828" transform="rotate(-20 22 118)"/>
-          <!-- Right arm (waving) -->
-          <g class="mascot-arm">
-            <ellipse cx="118" cy="100" rx="12" ry="24" fill="#F2D828" transform="rotate(25 118 100)"/>
-            <!-- Glove hand -->
-            <circle cx="125" cy="80" r="14" fill="white"/>
-            <circle cx="119" cy="70" r="7" fill="white"/>
-            <circle cx="130" cy="72" r="7" fill="white"/>
-            <circle cx="133" cy="82" r="6" fill="white"/>
-          </g>
-          <!-- Neck -->
-          <rect x="60" y="74" width="20" height="14" fill="#F2D828"/>
-          <!-- Head (lemon circle) -->
-          <ellipse cx="70" cy="62" rx="40" ry="38" fill="#F2D828"/>
-          <!-- Face: eyes -->
-          <circle cx="56" cy="58" r="9" fill="white"/>
-          <circle cx="84" cy="58" r="9" fill="white"/>
-          <circle cx="58" cy="60" r="5" fill="#1A3A9C"/>
-          <circle cx="86" cy="60" r="5" fill="#1A3A9C"/>
-          <circle cx="60" cy="58" r="2" fill="white"/>
-          <circle cx="88" cy="58" r="2" fill="white"/>
-          <!-- Smile -->
-          <path d="M 53 74 Q 70 86 87 74" stroke="#1A3A9C" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <!-- Cheeks -->
-          <circle cx="47" cy="72" r="7" fill="#F97316" opacity="0.3"/>
-          <circle cx="93" cy="72" r="7" fill="#F97316" opacity="0.3"/>
-          <!-- Cap -->
-          <ellipse cx="70" cy="30" rx="42" ry="12" fill="white"/>
-          <rect x="30" y="10" width="80" height="26" rx="10" fill="white"/>
-          <!-- Cap logo -->
-          <circle cx="70" cy="22" r="11" fill="#1A3A9C"/>
-          <text x="70" y="27" text-anchor="middle" font-size="9" fill="#F2D828" font-weight="bold">LT</text>
-          <!-- Cap brim -->
-          <rect x="22" y="28" width="96" height="10" rx="5" fill="white"/>
-          <!-- Leaf on head -->
-          <path d="M 100 14 Q 114 4 112 18 Q 100 28 100 14Z" fill="#22C55E"/>
-          <path d="M 100 14 Q 108 18 112 18" stroke="#16A34A" stroke-width="1"/>
-        </svg>
-      </div>
-    </div>
-
-    <!-- DRINKS ROW (left of truck) -->
-    <div class="drinks-row">
-      <!-- Classic -->
-      <div class="drink-cup">
-        <svg width="44" height="66" viewBox="0 0 44 66"><path d="M6 8 L10 58 Q10 62 22 62 Q34 62 34 58 L38 8Z" fill="#FEF08A" stroke="#F2D828" stroke-width="2"/><path d="M6 8 L38 8" stroke="#F2D828" stroke-width="2"/><circle cx="30" cy="10" r="8" fill="#FDE68A" stroke="#F2D828" stroke-width="1.5"/><text x="22" y="38" text-anchor="middle" font-size="8" fill="#92400E">Classic</text></svg>
-        <span class="drink-label">Classic</span>
-      </div>
-      <!-- Blue Lagoon -->
-      <div class="drink-cup">
-        <svg width="44" height="66" viewBox="0 0 44 66"><path d="M6 8 L10 58 Q10 62 22 62 Q34 62 34 58 L38 8Z" fill="#BAE6FD" stroke="#38BDF8" stroke-width="2"/><path d="M6 8 L38 8" stroke="#38BDF8" stroke-width="2"/><circle cx="30" cy="10" r="8" fill="#7DD3FC" stroke="#38BDF8" stroke-width="1.5"/><text x="22" y="38" text-anchor="middle" font-size="7" fill="#0C4A6E">Lagoon</text></svg>
-        <span class="drink-label">Blue Lagoon</span>
-      </div>
-      <!-- Berry -->
-      <div class="drink-cup">
-        <svg width="44" height="66" viewBox="0 0 44 66"><path d="M6 8 L10 58 Q10 62 22 62 Q34 62 34 58 L38 8Z" fill="#E9D5FF" stroke="#A855F7" stroke-width="2"/><path d="M6 8 L38 8" stroke="#A855F7" stroke-width="2"/><circle cx="30" cy="10" r="8" fill="#C084FC" stroke="#A855F7" stroke-width="1.5"/><text x="22" y="38" text-anchor="middle" font-size="7" fill="#4C1D95">Berry</text></svg>
-        <span class="drink-label">Berry Garden</span>
-      </div>
-      <!-- Sunset -->
-      <div class="drink-cup">
-        <svg width="44" height="66" viewBox="0 0 44 66"><path d="M6 8 L10 58 Q10 62 22 62 Q34 62 34 58 L38 8Z" fill="#FED7AA" stroke="#F97316" stroke-width="2"/><path d="M6 8 L38 8" stroke="#F97316" stroke-width="2"/><circle cx="30" cy="10" r="8" fill="#FB923C" stroke="#F97316" stroke-width="1.5"/><text x="22" y="38" text-anchor="middle" font-size="7" fill="#7C2D12">Sunset</text></svg>
-        <span class="drink-label">Sunset</span>
-      </div>
-    </div>
-
-  </div><!-- /hero-scene -->
-
+  <!-- Scroll cue -->
   <div class="hero-scroll">
     <span>Scroll</span>
-    <div class="scroll-dot"></div>
+    <div class="scroll-line"></div>
   </div>
+
 </section>
 
 <!-- ═════════════ MARQUEE STRIP ════════════ -->
@@ -923,7 +674,7 @@
         <span class="pill-icon">🚚</span>
         <div class="pill-text">
           <strong>We Come to You</strong>
-          <span>Moveable truck — find us at Market Square, events & concerts</span>
+          <span>Moveable truck — find us at Market Square, events &amp; concerts</span>
         </div>
       </div>
     </div>
@@ -1129,14 +880,10 @@
 </div>
 
 <script>
-  // Nav scroll
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 60);
   });
-
-  // Scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
       if (e.isIntersecting) {
@@ -1144,7 +891,7 @@
       }
     });
   }, { threshold: 0.1 });
-  revealEls.forEach(el => io.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
